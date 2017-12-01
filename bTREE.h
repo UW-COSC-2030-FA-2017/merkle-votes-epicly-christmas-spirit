@@ -43,26 +43,24 @@ public:
     int numberOfNodes();
 	void insert(string data, int time);
 	int find(string toFind);
+	string locate(int theTime);
 	void demolish(treeNode * &temp);
-	
-	string locate(const treeNode * root, int time);
-    string locate(string);
     
 	// helper functions
 	int numberOfNodes(const treeNode * temp);
 	void insert(treeNode * &temp, queue <treeNode *> &q, string data, int time);
 	int find(treeNode * temp, string toFind);
+	string locate(treeNode * temp, int time);
 
 	// display functions - referenced Lab 08
 	void bTREE::display(ostream& outfile);
-	void bTREE::displayLeft(ostream & outfile, treeNode * subtree, string prefix);
-	void bTREE::displayRight(ostream & outfile, treeNode * subtree, string prefix);
+	void bTREE::displayLeft(ostream & outfile, treeNode * temp, string prefix);
+	void bTREE::displayRight(ostream & outfile, treeNode * temp, string prefix);
     
     // friend functions
 	friend bool operator==(const bTREE& lhs, const bTREE& rhs);
     friend bool operator!=(const bTREE& lhs, const bTREE& rhs);
-
-    friend std::ostream& operator<<(std::ostream& out, const bTREE& p);
+	friend std::ostream& operator<<(ostream& out, const bTREE& p);
     
 };
 

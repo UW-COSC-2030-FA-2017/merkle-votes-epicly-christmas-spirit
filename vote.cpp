@@ -34,7 +34,10 @@ int main(int argc, char **argv)
 	
 	cout << "Gonna try to find 'IS IT FINALLY WORKING'!" << endl;
 	cout << myTree.find("IS IT FINALLY WORKING");
+	cout << endl;
+	cout << myTree.find("sure whatever");
 
 	cout << endl << "Everything checks out!" << endl;
+
 	return 0;
 }
