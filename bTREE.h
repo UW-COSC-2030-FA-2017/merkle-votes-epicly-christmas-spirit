@@ -1,47 +1,65 @@
 /* File: bTREE.h
-Author: Chris Schultz
-Date: 1 December 2017
-Description: Binary Tree Class
-*/
+   Author: Chris Schultz
+   Date: 1 December 2017
+   Description: Binary Tree Class
+   */
 
 #pragma once
 #include <string>
+#include <queue>
+#include <iostream>
+
 using namespace std;
 
 class bTREE
 {
-    struct treeNode{
-        string data;
-        int time;
+	struct treeNode {
+		string bData;
+		int tStamp;
 		bool isLeaf;
-
+		
+		// need a special constructor for the insertion function
+		// ooh so special
+		treeNode(string data, int time) {
+			this->bData = data;
+			this->tStamp= time;
+			this->left = NULL;
+			this->right = NULL;
+		}
 		treeNode * left;
 		treeNode * right;
-    };
+	};
     
 private:
-    //some data structure to hold your treeNodes together ...
-    //DATASTUCTURE treeNodes tree;
-    //any helper private variables you need
-	treeNode * root;
-	int numberOfNodes(const treeNode * root);
-	int insert(treeNode * root, string data, int time);
+	treeNode * rootPtr;
+	queue <treeNode *> helpMe;
     
 public:
 	bTREE();
     ~bTREE();
     
-    int dataInserted(const treeNode * root);
+    // just the normal stuff
+	int dataInserted();
     int numberOfNodes();
-	int insert(string data, int time);
-	int find(const treeNode * root, string toFind);
-	void demolish(treeNode * root);
+	void insert(string data, int time);
+	int find(string toFind);
+	void demolish(treeNode * &temp);
 	
-	string locate(const treeNode * root, int theTime);
+	string locate(const treeNode * root, int time);
     string locate(string);
     
+	// helper functions
+	int numberOfNodes(const treeNode * temp);
+	void insert(treeNode * &temp, queue <treeNode *> &q, string data, int time);
+	int find(treeNode * temp, string toFind);
+
+	// display functions - referenced Lab 08
+	void bTREE::display(ostream& outfile);
+	void bTREE::displayLeft(ostream & outfile, treeNode * subtree, string prefix);
+	void bTREE::displayRight(ostream & outfile, treeNode * subtree, string prefix);
     
-    friend bool operator==(const bTREE& lhs, const bTREE& rhs);
+    // friend functions
+	friend bool operator==(const bTREE& lhs, const bTREE& rhs);
     friend bool operator!=(const bTREE& lhs, const bTREE& rhs);
 
     friend std::ostream& operator<<(std::ostream& out, const bTREE& p);
