@@ -60,8 +60,7 @@ public:
     // friend functions
 	friend bool operator==(const bTREE& lhs, const bTREE& rhs);
     friend bool operator!=(const bTREE& lhs, const bTREE& rhs);
-
-    friend std::ostream& operator<<(ostream& out, const bTREE& p);
+	friend ostream& operator<<(ostream& out, const bTREE b);
     
 };
 

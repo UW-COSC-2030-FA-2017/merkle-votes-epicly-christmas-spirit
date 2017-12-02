@@ -14,7 +14,7 @@ bTREE::bTREE() {
 
 // it's a destructor. it calls the DEMOLISH function
 bTREE::~bTREE() {
-	demolish(rootPtr);
+	// demolish(rootPtr);
 }
 
 // will be the same as the Number of Nodes because data will always be inserted
@@ -34,14 +34,16 @@ void bTREE::insert(string data, int time) {
 }
 
 // for the destructor
-void bTREE::demolish(treeNode * &temp) {
-	if (temp != NULL) {
-		demolish(temp->left);
-		demolish(temp->right);
-		delete temp;
-	}
-	return;
-}
+// void bTREE::demolish(treeNode * &temp) {
+	// if (temp != NULL) {
+		// demolish(temp->left);
+		// demolish(temp->right);
+		// delete temp;
+// 	}
+	// else if (temp == NULL) {
+		// return;
+	// }
+// }
 
 // calls helper function
 int bTREE::find(string toFind) {
@@ -165,4 +167,30 @@ void bTREE::displayRight(ostream & outfile, treeNode * subtree, string prefix) {
 		displayRight(outfile, subtree->right, prefix + "       ");
 	}
 	return;
+}
+
+// OVERLOADED OPERATORS ---------------------------------------------------------
+bool operator ==(const bTREE& left, const bTREE& right) {
+	if ((left.rootPtr->bData == right.rootPtr->bData)
+		&& (left.rootPtr->tStamp == right.rootPtr->tStamp)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool operator !=(const bTREE& left, const bTREE & right) {
+	if ((left.rootPtr->bData == right.rootPtr->bData)
+		&& (left.rootPtr->tStamp == right.rootPtr->tStamp)) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+ostream& operator << (ostream& out, bTREE b) {
+	b.display(cout);
+	return out;
 }
