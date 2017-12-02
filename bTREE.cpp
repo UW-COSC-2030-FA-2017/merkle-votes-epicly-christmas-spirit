@@ -9,6 +9,7 @@
 // constructor sets the root to NULL, making empty tree
 bTREE::bTREE() {
 	rootPtr = NULL;
+	counter = 0;
 }
 
 // it's a destructor. it calls the DEMOLISH function
@@ -32,11 +33,6 @@ void bTREE::insert(string data, int time) {
 	return;
 }
 
-// calls helper function
-int bTREE::find(string toFind) {
-	return find(rootPtr, toFind);
-}
-
 // for the destructor
 void bTREE::demolish(treeNode * &temp) {
 	if (temp != NULL) {
@@ -48,8 +44,13 @@ void bTREE::demolish(treeNode * &temp) {
 }
 
 // calls helper function
-string bTREE::locate(int theTime) {
-	return locate(rootPtr, theTime);
+int bTREE::find(string toFind) {
+	return find(rootPtr, toFind);
+}
+
+// calls helper function
+string bTREE::locate(string toFind) {
+	return locate(rootPtr, toFind);
 }
 
 // HELPER FUNCTIONS -------------------------------------------------------------
@@ -66,64 +67,70 @@ int bTREE::numberOfNodes(const treeNode * temp) {
 
 // insert a value into the tree! uses a queue and just alternates between "left" and "right"
 void bTREE::insert(treeNode * &temp, queue <treeNode *> &q, string data, int time) {
-	// creates a temporary "stuff" node to work with the queue
 	treeNode * stuff = new treeNode(data, time);
-	// if temp exists
 	if (temp != NULL) {
-		// "prev" node is assigned to the front of the queue
 		treeNode * prev = q.front();
-		// if the left subtree doesn't exist, assign "stuff" to it
 		if (prev->left == NULL) {
 			prev->left = stuff;
 		}
-		// if the right subtree doesn't exist, assign "stuff" to it
 		else if (prev->right == NULL) {
 			prev->right = stuff;
 		}
-		// if the node and the left and right pointers all exist, pop off top of queue
 		if (temp != NULL && temp->left != NULL && temp->right != NULL) {
 			q.pop();
 		}
 	}
-	// if the node does not exist, assign "stuff" to it
 	else if (temp == NULL) {
 		temp = stuff;
 	}
-	// then push the assigned data into the queue
 	q.push(stuff);
 	return;
 }
 
-// returns the timestamp of whatever value is in the node
+// returns the number of operations it took to get the string
 int bTREE::find(treeNode * temp, string toFind) {
-	if (temp->bData == toFind) {
-		return temp->tStamp;
+	if (temp == NULL) {
+		return 0;
 	}
-	else if (toFind != temp->bData && temp == NULL) {
-		return -1;
+	int temp1 = 0, temp2 = 0;
+	if (toFind == temp->bData) {
+		return (temp1 + temp2 + 1);
 	}
 	else if (toFind != temp->bData) {
-		if (temp->left) {
-			return find(temp->left, toFind);
-		}
-		else if (temp->right) {
-			return find(temp->right, toFind);
-		}
+		temp1 = find(temp->left, toFind);
+		temp2 = find(temp->right, toFind);
 	}
+	return (temp1 + temp2 + 1);
 }
 
-// searching the tree by time stamp
-string bTREE::locate(treeNode * temp, int theTime) {
-	if (temp->tStamp == theTime) {
-		return temp->bData;
+// locates a string and returns the L-R path to find it
+// this straight up doesn't work. come back to it
+string bTREE::locate(treeNode * temp, string toFind) {
+	string test;
+	if (temp == NULL) {
+		return "empty tree";
 	}
-	else if (theTime != temp->tStamp) {
-		return locate(temp->left, theTime);
+	else if (toFind == temp->bData) {
+		test = test + "-END";
+		return test;
 	}
-	else if (theTime != temp->tStamp && temp == NULL) {
-		return "";
+	else if (temp->left->bData == toFind) {
+		test = test + "-L-";
+		return locate(temp->left, toFind);
 	}
+	else if (temp->right->bData == toFind) {
+		test = test + "-R-";
+		return locate(temp->right, toFind);
+	}
+	else if (temp->left != NULL) {
+		return locate(temp->left, toFind);
+	}
+	else if (temp->right != NULL) {
+		return locate(temp->right, toFind);
+	}
+	return test;
 }
+
 // DISPLAY FUNCTIONS ------------------------------------------------------------
 void bTREE::display(ostream& outfile) {
 	std::string prefix;
@@ -137,25 +144,25 @@ void bTREE::display(ostream& outfile) {
 	}
 }
 
-void bTREE::displayLeft(ostream & outfile, treeNode * temp, string prefix) {
-	if (temp == NULL) {
+void bTREE::displayLeft(ostream & outfile, treeNode * subtree, string prefix) {
+	if (subtree == NULL) {
 		outfile << prefix + "/" << std::endl;
 	}
 	else {
-		displayLeft(outfile, temp->left, prefix + "       ");
-		outfile << prefix + "/-----" << temp->bData << endl;
-		displayRight(outfile, temp->right, prefix + "|      ");
+		displayLeft(outfile, subtree->left, prefix + "       ");
+		outfile << prefix + "/-----" << subtree->bData << endl;
+		displayRight(outfile, subtree->right, prefix + "|      ");
 	}
 }
 
-void bTREE::displayRight(ostream & outfile, treeNode * temp, string prefix) {
-	if (temp == NULL) {
+void bTREE::displayRight(ostream & outfile, treeNode * subtree, string prefix) {
+	if (subtree == NULL) {
 		outfile << prefix + "\\" << std::endl;
 	}
 	else {
-		displayLeft(outfile, temp->left, prefix + "|      ");
-		outfile << prefix + "\\-----" << temp->bData << endl;
-		displayRight(outfile, temp->right, prefix + "       ");
+		displayLeft(outfile, subtree->left, prefix + "|      ");
+		outfile << prefix + "\\-----" << subtree->bData << endl;
+		displayRight(outfile, subtree->right, prefix + "       ");
 	}
+	return;
 }
-

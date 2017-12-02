@@ -19,7 +19,6 @@ class bTREE
 		bool isLeaf;
 		
 		// need a special constructor for the insertion function
-		// ooh so special
 		treeNode(string data, int time) {
 			this->bData = data;
 			this->tStamp= time;
@@ -33,6 +32,7 @@ class bTREE
 private:
 	treeNode * rootPtr;
 	queue <treeNode *> helpMe;
+	int counter;
     
 public:
 	bTREE();
@@ -42,25 +42,26 @@ public:
 	int dataInserted();
     int numberOfNodes();
 	void insert(string data, int time);
-	int find(string toFind);
-	string locate(int theTime);
 	void demolish(treeNode * &temp);
+	int find(string toFind);
+    string locate(string toFind);
     
 	// helper functions
 	int numberOfNodes(const treeNode * temp);
 	void insert(treeNode * &temp, queue <treeNode *> &q, string data, int time);
 	int find(treeNode * temp, string toFind);
-	string locate(treeNode * temp, int time);
+	string locate(treeNode * temp, string toFind);
 
 	// display functions - referenced Lab 08
-	void bTREE::display(ostream& outfile);
-	void bTREE::displayLeft(ostream & outfile, treeNode * temp, string prefix);
-	void bTREE::displayRight(ostream & outfile, treeNode * temp, string prefix);
+	void display(ostream& outfile);
+	void displayLeft(ostream & outfile, treeNode * subtree, string prefix);
+	void displayRight(ostream & outfile, treeNode * subtree, string prefix);
     
     // friend functions
 	friend bool operator==(const bTREE& lhs, const bTREE& rhs);
     friend bool operator!=(const bTREE& lhs, const bTREE& rhs);
-	friend std::ostream& operator<<(ostream& out, const bTREE& p);
+
+    friend std::ostream& operator<<(ostream& out, const bTREE& p);
     
 };
 

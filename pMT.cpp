@@ -1,34 +1,55 @@
+/* File: pMT.cpp
+   Author: Chris Schultz
+   Date: 1 December 2017
+   Description: Pseudo-Merkle Class Functions
+   */
+
 #include "pMT.h"
 
-pMT::pMT(int hashSelect)
-/**
- * @brief 
- * @param hashSelect a number corresponding to the hashfunction to use for this pMT
- * @return 
- */
-{
+// constructor, default to 1 if the integer is not 1,2, or 3
+pMT::pMT(int hashSelect) {
+	if (hashSelect == 1 || hashSelect == 2 || hashSelect == 3) {
+		selectedHash = hashSelect;
+	}
+	else {
+		selectedHash = 1;
+	}
 }
 
-pMT::~pMT()
-/**
- * @brief destructor
- * @return nada
- */
-{
+// it's another destructor. It's pretty cool stuff
+pMT::~pMT() {
 }
 
+// inserts a vote and time into a node on the tree
+// and returns the operations needed to insert
 int pMT::insert(string vote, int time) {
-	return 0;
+	if (selectedHash >= 1 && selectedHash <= 3) {
+		if (selectedHash == 1) {
+			myMerkle.insert(hash_1(vote), time);
+		}
+		else if (selectedHash == 2) {
+			myMerkle.insert(hash_2(vote), time);
+		}
+		else if (selectedHash == 3) {
+			myMerkle.insert(hash_3(vote), time);
+		}
+		return myMerkle.dataInserted();
+		}
+	else{
+		return -1;
+	}
 }
-/**
- * @brief insert a vote and time into a leaf node of tree
- * @param vote - a string
- * @param time - an int representing the time 
- * @return the number of operations needed to do the insert, -1 if out of memory
- */
 
+// searches for the vote, time, and hash and returns the operations to find it
 int pMT::find(string vote, int time, int hashSelect) {
-	return 0;
+	int temp = 0;
+	if (1 == (find(vote, time, selectedHash))) {
+		temp++;
+		return temp;
+	}
+	else {
+		return temp;
+	}
 }
 /**
  * @brief given a vote, timestamp, and hash function, does this vote exist in the tree?
@@ -38,7 +59,7 @@ int pMT::find(string vote, int time, int hashSelect) {
  * @return 0 if not found, else number of opperations required to find the matching vote
  */
 
-int pMT::findHash(string mhash) {
+int pMT::findHash(string mhash) { 
 	return 0;
 }
 /**
@@ -47,7 +68,7 @@ int pMT::findHash(string mhash) {
  * @return 0 if not found, else number of opperations required to find the matching hash
  */
 
-string pMT::locateData(string vote) {
+string pMT::locate(string vote) {
 	return "cool";
 }
 /**
@@ -57,7 +78,7 @@ string pMT::locateData(string vote) {
  */
 
 string pMT::locateHash(string mhash) {
-	return "nice";
+	return "more stuff";
 }
 /**
  * @brief Function takes a hash and returns the sequence of (L)eft and (R)ight moves to get to that node starting from root. 
@@ -66,27 +87,33 @@ string pMT::locateHash(string mhash) {
  */
 
 
-
+// cycles through and multiplies by the index value
 string pMT::hash_1(string key) {
-	return "aight";
+	unsigned int temp = 0;
+	for (int i = 0; i < key.length(); i++) {
+		temp = key[i] + (temp * i);
+	}
+	return to_string(temp);
 }
-/**
- * @brief A function that takes in a key and returns a hash of that key using some custom function
- * @param key, a string
- * @return a hash of the key
- */
 
+// just multiplies by a constant
 string pMT::hash_2(string key) {
-	return "sweet";
+	unsigned int temp = 0;
+	int seed = 37;
+	for (int i = 0; i < key.length(); i++) {
+		temp = (temp * seed) + key[i];
+	}
+	return to_string(temp);
 }
-/**
- * @brief A function that takes in a key and returns a hash of that key using some custom function
- * @param key, a string
- * @return a hash of the key
- */
 
+// uses base number 151 to multiply and then modulo
 string pMT::hash_3(string key) {
-	return "yeah";
+	unsigned int hash = 0;
+	for (int i = 0; i < key.length(); i++) {
+		hash = 151 * hash + key[i];
+		hash % 3;
+		return to_string(hash);
+	}
 }
 /**
  * @brief A function that takes in a key and returns a hash of that key using some custom function
@@ -101,8 +128,6 @@ string pMT::hash_3(string key) {
  * @param rhs, the right hand side of the equality statement
  * @return true if equal, false otherwise
  */
-// {
-// }
 
 // friend bool pMT::operator !=(const pMT& lhs, const pMT& rhs)
 /**
@@ -111,9 +136,6 @@ string pMT::hash_3(string key) {
  * @param rhs, the right hand side of the equality statement
  * @return true if not equal, false otherwise
  */
-// {
-    
-// }
 
 // friend pMT pMT::operator ^=(const pMT& lhs, const pMT& rhs)
 /**
@@ -122,9 +144,6 @@ string pMT::hash_3(string key) {
  * @param rhs, the right hand side of the equality statement
  * @return true if not equal, false otherwise
  */
-// {
-    
-// }
 
 
 // friend std::ostream& pMT::operator <<(std::ostream& out, const pMT& p)
@@ -134,9 +153,6 @@ string pMT::hash_3(string key) {
  * @param p
  * @return a tree to the screen
  */
-// {
-// }
-
 
 // friend pMT pMT::operator ^(const pMT& lhs, const pMT& rhs)
 /**
@@ -145,5 +161,3 @@ string pMT::hash_3(string key) {
  * @param rhs
  * @return a tree comprised of the right hand side tree nodes that are different from the left
  */
-// {
-// }

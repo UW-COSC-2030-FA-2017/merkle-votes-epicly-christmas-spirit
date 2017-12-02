@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include "bTree.h"
+#include "pMT.h"
 #include <iostream>
 using namespace std;
 
@@ -29,15 +30,26 @@ int main(int argc, char **argv)
 
 	cout << endl << endl << endl;
 
-	cout << "The number of nodes in the tree is " << myTree.numberOfNodes() << "!" << endl;
-	cout << "The number of data inserted is " << myTree.dataInserted() << "!" << endl;
+	cout << "The number of nodes in the tree is " << 
+		myTree.numberOfNodes() << "!" << endl;
+	cout << "The number of data inserted is " <<
+		myTree.dataInserted() << "!" << endl;
 	
 	cout << "Gonna try to find 'IS IT FINALLY WORKING'!" << endl;
-	cout << myTree.find("IS IT FINALLY WORKING");
-	cout << endl;
-	cout << myTree.find("sure whatever");
+	cout << myTree.find("IS IT FINALLY WORKING") << 
+		" operations to find the string!" << endl;
+	cout << myTree.find("why would you do this") << 
+		" operations to find 'why would you do this'!" << endl << endl;
+	
+	cout << myTree.locate("IS IT FINALLY WORKING");
+	cout << endl << "everything is great now!" << endl;
 
-	cout << endl << "Everything checks out!" << endl;
+	// MTREE TEST SECTION--------------------------------------------------------
+	cout << endl << "making three pseudo-Merkle trees." << endl;
+	pMT Merks1(1);
+	pMT Merks2(2);
+	pMT Merks3(3);
+	cout << "They, indeed, have been made. " << endl;
 
 	return 0;
 }
