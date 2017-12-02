@@ -1,3 +1,14 @@
+# TEAM CHRISTMAS SPIRIT
+Team...eh...member: Chris Schultz
+
+## References:
+
+http://www.cplusplus.com/reference/string/string/ for reference on "string" functions
+http://www.geeksforgeeks.org/insertion-binary-tree/ for reference on insertion, and using a queue
+
+Lab 08 for reference on binary trees and display function
+__________________________________________________________________________
+
 # MerkleVotes
 
 Merkle Is Voting - And it's going to be epic.
