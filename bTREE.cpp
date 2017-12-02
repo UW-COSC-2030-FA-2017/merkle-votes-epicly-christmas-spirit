@@ -9,7 +9,6 @@
 // constructor sets the root to NULL, making empty tree
 bTREE::bTREE() {
 	rootPtr = NULL;
-	counter = 0;
 }
 
 // it's a destructor. it calls the DEMOLISH function
@@ -53,6 +52,10 @@ int bTREE::find(string toFind) {
 // calls helper function
 string bTREE::locate(string toFind) {
 	return locate(rootPtr, toFind);
+}
+
+bool bTREE::isLeaf() {
+	return isLeaf(rootPtr);
 }
 
 // HELPER FUNCTIONS -------------------------------------------------------------
@@ -131,6 +134,22 @@ string bTREE::locate(treeNode * temp, string toFind) {
 		return locate(temp->right, toFind);
 	}
 	return test;
+}
+
+// searches the left and right trees to test if temp is a leaf
+bool bTREE::isLeaf(treeNode * temp) {
+	if (temp->left == NULL && temp->right == NULL) {
+		return true;
+	}
+	else if (temp->left != NULL) {
+		return isLeaf(temp->left);
+	}
+	else if (temp->right != NULL) {
+		return isLeaf(temp->right);
+	}
+	else {
+		return false;
+	}
 }
 
 // DISPLAY FUNCTIONS ------------------------------------------------------------

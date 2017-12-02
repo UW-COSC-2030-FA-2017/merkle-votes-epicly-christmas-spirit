@@ -9,7 +9,6 @@
 #include "pMT.h"
 #include <iostream>
 #include <fstream>
-#include <sstream>
 using namespace std;
 
 int main(int argc, char **argv)
@@ -49,21 +48,44 @@ int main(int argc, char **argv)
 	cout << endl;
 
 	// MTREE TEST SECTION--------------------------------------------------------
-	ifstream theFile;
+	cout << "---------------------------MTREE TEST SECTION--------------------------";
+	ifstream theFile, theFile2;
 	string data;
 	int time;
 
 	theFile.open("mv_test.txt");
 	
-	cout << "Hash function 1 " << endl;
+	cout << endl << "Hash function 1 " << endl;
 	pMT TheMerk(1);
 
 	while (!theFile.eof()) {
 		theFile >> data >> time;
 		TheMerk.insert(data, time);
 	}
+	theFile.close();
+
+	cout << endl << "Will create another sheet to compare. " << endl;
+	theFile.open("mv_text.txt");
+	cout << "Hash function 2 " << endl;
+	pMT SecondMerk(2);
+	
+	while (!theFile.eof()) {
+		theFile >> data >> time;
+		SecondMerk.insert(data, time);
+	}
+	theFile.close();
+
+	cout << "Will test to see if the trees are the same!" << endl;
+	if (TheMerk == SecondMerk) {
+		cout << "They are!" << endl;
+	}
+	else {
+		cout << "The two trees are unequal. " << endl;
+	}
 
 	cout << endl << "Here is the tree!" << endl << endl;
-	theFile.close();
+	cout << TheMerk;
+	cout << endl << "And here is the second tree. " << endl << endl;
+	cout << SecondMerk;
 	return 0;
 }

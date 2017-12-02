@@ -24,11 +24,8 @@ public:
     pMT(int);
     ~pMT();
     
-	// normal? functions 
-    
     int insert(string, int);
     
-    // helper functions
 	int find(string vote, int time, int hashSelect);
     int findHash(string);
     

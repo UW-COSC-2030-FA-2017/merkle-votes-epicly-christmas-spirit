@@ -23,17 +23,21 @@ pMT::~pMT() {
 // inserts a vote and time into a node on the tree
 // and returns the operations needed to insert
 int pMT::insert(string vote, int time) {
+	int counter = 0;
 	if (selectedHash >= 1 && selectedHash <= 3) {
 		if (selectedHash == 1) {
+			counter++;
 			myMerkle.insert(hash_1(vote), time);
 		}
 		else if (selectedHash == 2) {
+			counter++;
 			myMerkle.insert(hash_2(vote), time);
 		}
 		else if (selectedHash == 3) {
+			counter++;
 			myMerkle.insert(hash_3(vote), time);
 		}
-		return myMerkle.dataInserted();
+		return counter;
 		}
 	else{
 		return -1;
@@ -52,6 +56,7 @@ int pMT::find(string vote, int time, int hashSelect) {
 	}
 }
 
+// uses find() function to locate the hash
 int pMT::findHash(string mhash) { 
 	return myMerkle.find(mhash);
 	return 0;
@@ -90,10 +95,10 @@ string pMT::hash_2(string key) {
 string pMT::hash_3(string key) {
 	unsigned int hash = 0;
 	for (int i = 0; i < key.length(); i++) {
-		hash = 151 * hash + key[i];
+		hash = 151 * (hash + key[i]);
 		hash % 3;
-		return to_string(hash);
 	}
+	return to_string(hash);
 }
 
 // the overloaded operator from bTREE.cpp should take care of this

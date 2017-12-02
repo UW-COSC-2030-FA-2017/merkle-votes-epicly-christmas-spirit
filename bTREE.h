@@ -16,7 +16,6 @@ class bTREE
 	struct treeNode {
 		string bData;
 		int tStamp;
-		bool isLeaf;
 		
 		// need a special constructor for the insertion function
 		treeNode(string data, int time) {
@@ -31,26 +30,28 @@ class bTREE
     
 private:
 	treeNode * rootPtr;
+	treeNode * root;
 	queue <treeNode *> helpMe;
-	int counter;
     
 public:
 	bTREE();
     ~bTREE();
     
-    // just the normal stuff
+    // usable functions
 	int dataInserted();
     int numberOfNodes();
 	void insert(string data, int time);
-	void demolish(treeNode * &temp);
+	// void demolish(treeNode * &temp);
 	int find(string toFind);
     string locate(string toFind);
+	bool isLeaf();
     
 	// helper functions
 	int numberOfNodes(const treeNode * temp);
 	void insert(treeNode * &temp, queue <treeNode *> &q, string data, int time);
 	int find(treeNode * temp, string toFind);
 	string locate(treeNode * temp, string toFind);
+	bool isLeaf(treeNode * temp);
 
 	// display functions - referenced Lab 08
 	void display(ostream& outfile);
