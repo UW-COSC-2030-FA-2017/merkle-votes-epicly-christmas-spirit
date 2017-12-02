@@ -1,3 +1,7 @@
+# TEAM CHRISTMAS SPIRIT
+Team...eh...member: Chris Schultz
+__________________________________________________________________________
+
 # MerkleVotes
 
 Merkle Is Voting - And it's going to be epic.
