@@ -5,6 +5,7 @@
    */
 
 #include "bTREE.h"
+#include <ctime>
 
 // constructor sets the root to NULL, making empty tree
 bTREE::bTREE() {
@@ -16,19 +17,24 @@ bTREE::~bTREE() {
 	// demolish(rootPtr);
 }
 
-// will be the same as the Number of Nodes because data will always be inserted
+// calls helper function
 int bTREE::dataInserted() {
-	return numberOfNodes(rootPtr);
+	return dataInserted(rootPtr);
 }
 
 // calls helper function 
 int bTREE::numberOfNodes() {
- 	return numberOfNodes(rootPtr);
- }
+	return numberOfNodes(rootPtr);
+}
 
 // calls helper function
 void bTREE::insert(string data, int time) {
 	insert(rootPtr, helpMe, data, time);
+	return;
+}
+
+void bTREE::insertR(string data, int time) {
+	insertR(rootPtr, data, time);
 	return;
 }
 
@@ -39,9 +45,9 @@ void bTREE::insert(string data, int time) {
 		// demolish(temp->right);
 		// delete temp;
 // 	}
-	// else if (temp == NULL) {
-		// return;
-	// }
+// else if (temp == NULL) {
+	// return;
+// }
 // }
 
 // calls helper function
@@ -54,11 +60,26 @@ string bTREE::locate(string toFind) {
 	return locate(rootPtr, toFind);
 }
 
+// calls helper function
 bool bTREE::isLeaf() {
 	return isLeaf(rootPtr);
 }
 
 // HELPER FUNCTIONS -------------------------------------------------------------
+
+// find the amount of data actually inserted into the tree
+// should generally be the same as the number of nodes
+int bTREE::dataInserted(treeNode * temp) {
+	if (temp == NULL) {
+		return 0;
+	}
+	else if (temp->left == NULL && temp->right == NULL) {
+		return 1;
+	}
+	else {
+		return 1 + (dataInserted(temp->left) + dataInserted(temp->right));
+	}
+}
 
 // count the number of total nodes in the tree!
 int bTREE::numberOfNodes(const treeNode * temp) {
@@ -72,8 +93,15 @@ int bTREE::numberOfNodes(const treeNode * temp) {
 
 // insert a value into the tree! uses a queue and just alternates between "left" and "right"
 void bTREE::insert(treeNode * &temp, queue <treeNode *> &q, string data, int time) {
-	treeNode * stuff = new treeNode(data, time);
-	if (temp != NULL) {
+	treeNode * stuff = new treeNode;
+	stuff->bData = data;
+	stuff->tStamp = time;
+	stuff->left = NULL;
+	stuff->right = NULL;
+	if (temp == NULL) {
+		temp = stuff;
+	}
+	else if (temp != NULL) {
 		treeNode * prev = q.front();
 		if (prev->left == NULL) {
 			prev->left = stuff;
@@ -85,10 +113,35 @@ void bTREE::insert(treeNode * &temp, queue <treeNode *> &q, string data, int tim
 			q.pop();
 		}
 	}
-	else if (temp == NULL) {
+	q.push(stuff);
+	return;
+}
+
+// recursively insert a value into the tree - testing for an alternative method
+// modded from -https://stackoverflow.com/questions/8183985/recursive-insertion-of-bst
+// priorization of left tree for simplicity
+void bTREE::insertR(treeNode * &temp, string data, int time) {
+	if (temp == NULL) {
+		treeNode * stuff = new treeNode;
+		stuff->bData = data;
+		stuff->tStamp = time;
+		stuff->left = NULL;
+		stuff->right = NULL;
+		stuff->isLeaf = true;
 		temp = stuff;
 	}
-	q.push(stuff);
+	else if (temp->left == NULL){
+		return insertR(temp->left, data, time);
+	}
+	else if (temp->right == NULL) {
+		return insertR(temp->right, data, time);
+	}
+	else if (temp->left != NULL) {
+		return insertR(temp->left, data, time);
+	}
+	else {
+		return insertR(temp->right, data, time);
+	}
 	return;
 }
 
@@ -97,46 +150,40 @@ int bTREE::find(treeNode * temp, string toFind) {
 	if (temp == NULL) {
 		return 0;
 	}
-	int temp1 = 0, temp2 = 0;
-	if (toFind == temp->bData) {
-		return (temp1 + temp2 + 1);
+	else {
+		int temp1 = 0, temp2 = 0;
+		if (toFind == temp->bData) {
+			return (temp1 + temp2 + 1);
+		}
+		else if (toFind != temp->bData) {
+			temp1 = find(temp->left, toFind);
+			temp2 = find(temp->right, toFind);
+			return (temp1 + temp2 + 1);
+		}
 	}
-	else if (toFind != temp->bData) {
-		temp1 = find(temp->left, toFind);
-		temp2 = find(temp->right, toFind);
-	}
-	return (temp1 + temp2 + 1);
 }
 
 // locates a string and returns the L-R path to find it
-// this straight up doesn't work. come back to it
+// based off of the find() function
 string bTREE::locate(treeNode * temp, string toFind) {
-	string test;
+	string testy1, testy2;
 	if (temp == NULL) {
-		return "empty tree";
+		return "empty";
 	}
-	else if (toFind == temp->bData) {
-		test = test + "-END";
-		return test;
+	else {
+		if (toFind == temp->bData) {
+			return (testy1 + testy2 + "-FINISH");
+		}
+		else if (toFind != temp->bData) {
+			testy1 = testy1 + "-L-" + locate(temp->left, toFind);
+			testy2 = testy2 + "-R-" + locate(temp->right, toFind);
+			return testy1 + testy2;
+		}
 	}
-	else if (temp->left->bData == toFind) {
-		test = test + "-L-";
-		return locate(temp->left, toFind);
-	}
-	else if (temp->right->bData == toFind) {
-		test = test + "-R-";
-		return locate(temp->right, toFind);
-	}
-	else if (temp->left != NULL) {
-		return locate(temp->left, toFind);
-	}
-	else if (temp->right != NULL) {
-		return locate(temp->right, toFind);
-	}
-	return test;
+	return testy1 + testy2;
 }
 
-// searches the left and right trees to test if temp is a leaf
+// searches the left and right trees to test if the root node is a leaf
 bool bTREE::isLeaf(treeNode * temp) {
 	if (temp->left == NULL && temp->right == NULL) {
 		return true;
@@ -153,6 +200,7 @@ bool bTREE::isLeaf(treeNode * temp) {
 }
 
 // DISPLAY FUNCTIONS ------------------------------------------------------------
+// Lab 08 code from Tom Bailey
 void bTREE::display(ostream& outfile) {
 	std::string prefix;
 	if (rootPtr == NULL) {
