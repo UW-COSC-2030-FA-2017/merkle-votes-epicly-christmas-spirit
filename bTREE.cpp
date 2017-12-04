@@ -5,7 +5,6 @@
    */
 
 #include "bTREE.h"
-#include <ctime>
 
 // constructor sets the root to NULL, making empty tree
 bTREE::bTREE() {

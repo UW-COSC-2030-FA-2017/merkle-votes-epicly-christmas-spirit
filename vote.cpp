@@ -82,6 +82,7 @@ int main(int argc, char **argv)
 	string vote;
 	int time = 0;
 	fstream theFile;
+	fstream otherFile;
 	
 	cout << endl;
 	cout << "---------------mTREE test section!---------------" << endl;
@@ -105,8 +106,10 @@ int main(int argc, char **argv)
 	pMT CompMerkle = pMT(1);
 	pMT SecondMerkle = pMT(2);
 	pMT ThirdMerkle = pMT (3);
+	pMT DiffMerkle = pMT(1);
 	cout << "I created a Merkle Tree for you!" << endl;
 	theFile.open("mv_test.txt");
+	
 	if (!theFile) {
 		cout << "Could not open the test file." << endl;
 	}
@@ -130,8 +133,15 @@ int main(int argc, char **argv)
 	while (theFile >> vote >> time) {
 		ThirdMerkle.insert(vote, time);
 	}
-	cout << endl << "All three trees created!" << endl << endl;
+	cout << "Third tree created. Creating a final tree with a new "
+		"set of data. " << endl;
+	otherFile.open("mv_test2.txt"); 
+	while (otherFile >> vote >> time) {
+		DiffMerkle.insert(vote, time);
+	}
+	cout << endl << "All trees created!" << endl << endl;
 	theFile.close();
+	otherFile.close();
 
 	// Merkle Comparison Section
 	userIn = 0;
@@ -141,6 +151,7 @@ int main(int argc, char **argv)
 		cout << "(2) Compare to a tree constructed from the second hash function. " << endl;
 		cout << "(3) Compare to a tree constructed from the third hash function. " << endl;
 		cout << "(4) Display the first tree we have created. " << endl;
+		cout << "(5) Compare it to a tree with a different set of data. " << endl;
 		cout << "(-9999) Quit the program like a nerd " << endl;
 		cin >> userIn;
 		cout << endl;
@@ -178,6 +189,16 @@ int main(int argc, char **argv)
 				break;
 			case 4:
 				cout << endl << MyMerkle << endl;
+				break;
+			case 5:
+				cout << " I will compare the first Merkle tree to one "
+					"with an entirely different set of data. " << endl;
+				if (MyMerkle == DiffMerkle) {
+					cout << "Validated: Trees are identical. " << endl;
+				}
+				else {
+					cout << "Not validated. " << endl;
+				}
 				break;
 			default:
 				cout << "I do not recognize that command. " << endl;
