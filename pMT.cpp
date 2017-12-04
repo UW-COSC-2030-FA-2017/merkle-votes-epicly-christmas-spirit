@@ -27,15 +27,15 @@ int pMT::insert(string vote, int time) {
 	if (selectedHash >= 1 && selectedHash <= 3) {
 		if (selectedHash == 1) {
 			counter++;
-			myMerkle.insert(hash_1(vote), time);
+			myMerkle.insertR(hash_1(vote), time);
 		}
 		else if (selectedHash == 2) {
 			counter++;
-			myMerkle.insert(hash_2(vote), time);
+			myMerkle.insertR(hash_2(vote), time);
 		}
 		else if (selectedHash == 3) {
 			counter++;
-			myMerkle.insert(hash_3(vote), time);
+			myMerkle.insertR(hash_3(vote), time);
 		}
 		return counter;
 		}
@@ -59,7 +59,6 @@ int pMT::find(string vote, int time, int hashSelect) {
 // uses find() function to locate the hash
 int pMT::findHash(string mhash) { 
 	return myMerkle.find(mhash);
-	return 0;
 }
 
 // uses locate() function to return the sequence
@@ -74,29 +73,32 @@ string pMT::locateHash(string mhash) {
 
 // cycles through and multiplies by the index value
 string pMT::hash_1(string key) {
-	unsigned int temp = 0;
+	unsigned int hash = 0;
 	for (int i = 0; i < key.length(); i++) {
-		temp = key[i] + (temp * i);
+		hash = key[i] + (hash * i);
 	}
-	return to_string(temp);
+	return to_string(hash);
 }
 
-// just multiplies by a constant
+// multiplies by two seed values and changes them every loop
 string pMT::hash_2(string key) {
-	unsigned int temp = 0;
-	int seed = 37;
+	unsigned int hash = 0;
+	unsigned int seed1 = 37;
+	unsigned int seed2 = 113;
 	for (int i = 0; i < key.length(); i++) {
-		temp = (temp * seed) + key[i];
+		hash = (hash * seed1) + key[i];
+		seed1 = (seed1 * seed2);
 	}
-	return to_string(temp);
+	return to_string(hash);
 }
 
 // uses base number 151 to multiply and then modulo
 string pMT::hash_3(string key) {
 	unsigned int hash = 0;
+	unsigned int modul = 1553;
 	for (int i = 0; i < key.length(); i++) {
 		hash = 151 * (hash + key[i]);
-		hash % 3;
+		modul = hash % 3;
 	}
 	return to_string(hash);
 }
